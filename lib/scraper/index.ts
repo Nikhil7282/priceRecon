@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { extractCurrency, extractPrice } from "../utils";
+import { extractCurrency, extractDescription, extractPrice } from "../utils";
 
 export async function scrapeAmazonProduct(url: string) {
   if (!url) return;
@@ -43,7 +43,7 @@ export async function scrapeAmazonProduct(url: string) {
       $(
         "#corePrice_desktop > div > table > tbody > tr:nth-child(1) > td.a-span12.a-color-secondary.a-size-base > span.a-price.a-text-price.a-size-base > span:nth-child(2)"
       )
-    );
+    ).slice(0, 6);
     const stockSelector = $("#availability span:nth-child(4)>span")
       .text()
       .trim()
@@ -68,17 +68,34 @@ export async function scrapeAmazonProduct(url: string) {
     )
       .text()
       .replace(/[-%]/g, "");
+    const regex = /\((\d+)\)/;
+    const result = disRate.match(regex) || [];
 
-    console.log({
+    const description = extractDescription($);
+
+    const ratings = $("#acrPopover > span.a-declarative > a > span")
+      .text()
+      .slice(0, 4);
+
+    const data = {
+      url,
+      currency: currency || "$",
+      image: imageUrls[0],
       title,
       price,
+      description,
       originalPrice,
-      outOfStock,
-      imageUrls,
-      currency,
-      disRate,
-      // discountRate,
-    });
+      priceHistory: [],
+      discountRate: discountRate || result[1] || 0,
+      category: "Category",
+      ratings: Number(ratings) || 0,
+      isOutOfStock: outOfStock,
+      lowestPrice: Number(price) || Number(originalPrice),
+      highestPrice: Number(originalPrice) || Number(price),
+      averagePrice: Number(price) || Number(originalPrice),
+    };
+    // console.log(data);
+    return data;
   } catch (error: any) {
     throw new Error(`Failed to scrape product: ${error.message}`);
   }
