@@ -20,7 +20,7 @@ export async function scrapeProduct(productUrl: string) {
 
       const updatedPriceHistory: any = [
         ...existingProduct.priceHistory,
-        { price: Number(scrappedProduct.price) },
+        { price: Number(scrappedProduct.currentPrice) },
       ];
       product = {
         ...scrappedProduct,
