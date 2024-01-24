@@ -27,14 +27,14 @@ export const generateEmailBody = async (
       (subject = "Welcome to Price Tracker"),
         (body = `
         <div>
-          <h2>Welcome to PriceWise 🚀</h2>
-          <p>You are now tracking ${product.title}.</p>
+          <h2>Welcome to PriceRecon 🚀</h2>
+          <p>We are now tracking ${product.title}.For You....</p>
           <p>Here's an example of how you'll receive updates:</p>
           <div style="border: 1px solid #ccc; padding: 10px; background-color: #f8f8f8;">
             <h3>${product.title} is back in stock!</h3>
             <p>We're excited to let you know that ${product.title} is now back in stock.</p>
             <p>Don't miss out - <a href="${product.url}" target="_blank" rel="noopener noreferrer">buy it now</a>!</p>
-            <img src="https://i.ibb.co/pwFBRMC/Screenshot-2023-09-26-at-1-47-50-AM.png" alt="Product Image" style="max-width: 100%;" />
+            <img src="${product.image}" alt="Product Image" style="max-width: 100%;" />
           </div>
           <p>Stay tuned for more updates on ${product.title} and other products you're tracking.</p>
         </div>
@@ -89,8 +89,10 @@ export const sendEmail = async (
   emailContent: EmailContent,
   sendTo: string[]
 ) => {
+  // console.log("Mail Options");
+
   const mailOptions = {
-    from: "",
+    from: "pricerecon@outlook.com",
     to: sendTo,
     html: emailContent.body,
     subject: emailContent.subject,
