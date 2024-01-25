@@ -46,6 +46,6 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+// delete mongoose.models.product;
 export const Product =
-  mongoose.models.Product || mongoose.model("products", productSchema);
+  mongoose.models.Product || mongoose.model("product", productSchema);
