@@ -31,6 +31,8 @@ const productSchema = new mongoose.Schema(
       { price: { type: Number, required: true } },
       { date: { type: Date, default: Date.now } },
     ],
+    stars: { type: Number },
+    ratings: { type: Number },
     lowestPrice: { type: Number },
     highestPrice: { type: Number },
     averagePrice: { type: Number },
@@ -46,4 +48,4 @@ const productSchema = new mongoose.Schema(
 );
 
 export const Product =
-  mongoose.models.Product || mongoose.model("Product", productSchema);
+  mongoose.models.Product || mongoose.model("products", productSchema);

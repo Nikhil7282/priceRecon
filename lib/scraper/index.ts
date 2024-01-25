@@ -77,6 +77,22 @@ export async function scrapeAmazonProduct(url: string) {
       .text()
       .slice(0, 4);
 
+    const stars = $("#acrPopover > span.a-declarative > a > span")
+      .text()
+      .trim()
+      .slice(0, 4);
+
+    // const customerImageUrl = [];
+    // for (let i = 1; i < 6; i++) {
+    //   let url = $(`#anonCarousel4 > ol > li:nth-child(1) > div`).attr(
+    //     "data-url"
+    //   );
+    //   console.log(url);
+
+    //   customerImageUrl.push(url);
+    // }
+    // console.log(customerImageUrl);
+
     const data = {
       url,
       currency: currency || "$",
@@ -94,9 +110,9 @@ export async function scrapeAmazonProduct(url: string) {
       highestPrice: Number(originalPrice) || Number(price),
       averagePrice: Number(price) || Number(originalPrice),
       reviewsCount: 100,
-      stars: 4.5,
+      stars: Number(stars),
     };
-    console.log(price);
+    // console.log(data);
     return data;
   } catch (error: any) {
     throw new Error(`Failed to scrape product: ${error.message}`);
