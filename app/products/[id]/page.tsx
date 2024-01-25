@@ -1,6 +1,7 @@
 import Model from "@/components/Model";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
+import Stars from "@/components/Stars";
 import { getProductById, getSimilarProducts } from "@/lib/actions";
 import { formatNumber } from "@/lib/utils";
 import { Product } from "@/types";
@@ -15,6 +16,8 @@ type Props = {
 
 export default async function ProductPage({ params: { id } }: Props) {
   const product: Product = await getProductById(id);
+  console.log(product);
+
   if (!product) redirect("/");
   const similarProducts = await getSimilarProducts(id);
   return (
@@ -71,6 +74,9 @@ export default async function ProductPage({ params: { id } }: Props) {
                   width={20}
                   height={20}
                 />
+              </div>
+              <div className="flex">
+                <Stars stars={product.ratings || 0} />
               </div>
             </div>
           </div>
