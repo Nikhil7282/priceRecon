@@ -25,7 +25,7 @@ function ProductCard({ product }: Props) {
         <div className="flex justify-between">
           <p>{product.category}</p>
           <p className="text-black text-lg font-semibold">
-            <span>{product?.currency}</span>
+            <span>{product?.currency + " "}</span>
             <span>{product?.currentPrice}</span>
           </p>
         </div>

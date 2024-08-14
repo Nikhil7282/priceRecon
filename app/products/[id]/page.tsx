@@ -16,10 +16,11 @@ type Props = {
 
 export default async function ProductPage({ params: { id } }: Props) {
   const product: Product = await getProductById(id);
-  console.log(product);
 
   if (!product) redirect("/");
+
   const similarProducts = await getSimilarProducts(id);
+
   return (
     <div className="product-container">
       <div className="flex gap-28 xl:flex-row flex-col">
@@ -81,16 +82,19 @@ export default async function ProductPage({ params: { id } }: Props) {
             </div>
           </div>
           <div className="product-info">
-            <div className="flex flex-col gap-2">
-              <p className="text-[34px] text-secondary font-bold">
-                {product.currency}
-                {formatNumber(product.currentPrice)}
-              </p>
-              <p className="text-[21px] text-black opacity-50 line-through">
-                {product.currency}
-                {formatNumber(product.originalPrice)}
-              </p>
-            </div>
+            {product.isOutOfStock ? (
+              <>Out Of Stock</>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <p className="text-[34px] text-secondary font-bold">
+                  {product.currency} {formatNumber(product?.currentPrice)}
+                </p>
+                <p className="text-[21px] text-black opacity-50 line-through">
+                  {product.currency}
+                  {formatNumber(product.originalPrice)}
+                </p>
+              </div>
+            )}
             <div className="flex flex-col gap-4">
               <div className="flex gap-3">
                 <div className="product-stars">
