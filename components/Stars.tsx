@@ -8,18 +8,17 @@ type Props = {
 export default function Stars({ stars }: Props) {
   const [star, setStar] = useState<string[] | undefined>([]);
   useEffect(() => {
-    console.log("prop", stars);
     const rating = Math.floor(stars);
-    console.log(rating);
-
-    const remaining = 5 - rating;
     let arr = new Array(5).fill(undefined);
     function populateArray() {
-      for (let i = 0; i < rating; i++) {
+      let i = 0;
+      while (i < rating) {
         arr[i] = "/assets/icons/star-filled.svg";
+        i++;
       }
-      for (let i = 0; i < remaining; i++) {
+      while (i < 5) {
         arr[i] = "/assets/icons/star-empty.svg";
+        i++;
       }
       setStar(arr);
     }
@@ -28,10 +27,8 @@ export default function Stars({ stars }: Props) {
 
   return (
     <>
-      {console.log(star)}
       {star &&
         star.map((st, idx) => {
-          console.log(st);
           return <Image key={idx} src={st} alt="star" width={18} height={18} />;
         })}
     </>

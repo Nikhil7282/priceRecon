@@ -5,8 +5,6 @@ import { extractCurrency, extractDescription, extractPrice } from "../utils";
 export async function scrapeAmazonProduct(url: string) {
   if (!url) return;
 
-  //   curl --proxy brd.superproxy.io:22225 --proxy-user brd-customer-hl_d7f89dc5-zone-unblocker:fdkrr8akwbiw -k https://lumtest.com/myip.json
-
   const username = String(process.env.Bright_Data_Username);
   const password = String(process.env.Bright_Data_Password);
   const port = 22225;
@@ -23,9 +21,27 @@ export async function scrapeAmazonProduct(url: string) {
 
   try {
     const response = await axios.get(url, options);
-    // console.log(response.data);
     const $ = cheerio.load(response.data);
+
     const title = $("#productTitle").text().trim();
+
+    const stockSelector = $("#availability > span:nth-child(4) > span")
+      .text()
+      .trim()
+      .toLowerCase();
+
+    let outOfStock =
+      stockSelector === "currently unavailable" ||
+      stockSelector === "temporarily out of stock.";
+
+    const image =
+      $("#imaBlkFront").attr("data-a-dynamic-image") ||
+      $("#landingImage").attr("data-a-dynamic-image") ||
+      "{}";
+    const imageUrls = Object.keys(JSON.parse(image));
+
+    const currency = extractCurrency($(".a-price-symbol"));
+
     const price = extractPrice(
       $(".priceToPay span.a-price-whole"),
       $("a.size.base.a-color-price"),
@@ -44,24 +60,6 @@ export async function scrapeAmazonProduct(url: string) {
         "#corePrice_desktop > div > table > tbody > tr:nth-child(1) > td.a-span12.a-color-secondary.a-size-base > span.a-price.a-text-price.a-size-base > span:nth-child(2)"
       )
     ).slice(0, 6);
-    const stockSelector = $("#availability span:nth-child(4)>span")
-      .text()
-      .trim()
-      .toLowerCase();
-    let outOfStock =
-      stockSelector === "currently unavailable" ||
-      stockSelector === "temporarily out of stock.";
-
-    const image =
-      $("#imaBlkFront").attr("data-a-dynamic-image") ||
-      $("#landingImage")
-        // .attr("src")
-        .attr("data-a-dynamic-image") ||
-      "{}";
-    const imageUrls = Object.keys(JSON.parse(image));
-
-    const currency = extractCurrency($(".a-price-symbol"));
-
     const discountRate = $(".savingsPercentage").text().replace(/[-%]/g, "");
     const disRate = $(
       "#corePrice_desktop > div > table > tbody > tr:nth-child(3) > td.a-span12.a-color-price.a-size-base > span.a-color-price"
@@ -81,17 +79,6 @@ export async function scrapeAmazonProduct(url: string) {
       .text()
       .trim()
       .slice(0, 4);
-
-    // const customerImageUrl = [];
-    // for (let i = 1; i < 6; i++) {
-    //   let url = $(`#anonCarousel4 > ol > li:nth-child(1) > div`).attr(
-    //     "data-url"
-    //   );
-    //   console.log(url);
-
-    //   customerImageUrl.push(url);
-    // }
-    // console.log(customerImageUrl);
 
     const data = {
       url,

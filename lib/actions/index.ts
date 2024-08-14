@@ -17,9 +17,6 @@ export async function scrapeProduct(productUrl: string) {
     let product = scrappedProduct;
     const existingProduct = await Product.findOne({ url: scrappedProduct.url });
     if (existingProduct) {
-      // console.log("string", scrappedProduct.price);
-      // console.log(Number(scrappedProduct.price));
-
       const updatedPriceHistory: any = [
         ...existingProduct.priceHistory,
         { price: Number(scrappedProduct.currentPrice) },

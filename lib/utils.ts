@@ -9,7 +9,6 @@ const Notification = {
 
 const THRESHOLD_PERCENTAGE = 40;
 
-// Extracts and returns the price from a list of possible elements.
 export function extractPrice(...elements: any) {
   for (const element of elements) {
     const priceText = element.text().trim();
@@ -30,20 +29,18 @@ export function extractPrice(...elements: any) {
   return "";
 }
 
-// Extracts and returns the currency symbol from an element.
 export function extractCurrency(element: any) {
-  const currencyText = element.text().trim().slice(0, 1);
+  let currencyText = element.text().trim().slice(0, 1);
+  // console.log("curr", currencyText);
+  if (currencyText[0] === "$") {
+    currencyText = "$";
+  }
   return currencyText ? currencyText : "";
 }
 
-// Extracts description from two possible elements from amazon
 export function extractDescription($: any) {
-  // these are possible elements holding description of the product
-  const selectors = [
-    ".a-unordered-list .a-list-item",
-    ".a-expander-content p",
-    // Add more selectors here if needed
-  ];
+  // const selectors = [".a-unordered-list .a-list-item", ".a-expander-content p"];
+  const selectors = ["#feature-bullets > ul"];
 
   for (const selector of selectors) {
     const elements = $(selector);
@@ -55,8 +52,6 @@ export function extractDescription($: any) {
       return textContent;
     }
   }
-
-  // If no matching elements were found, return an empty string
   return "";
 }
 
@@ -111,8 +106,12 @@ export const getEmailNotifyType = (
 };
 
 export const formatNumber = (num: number = 0) => {
-  return num.toLocaleString(undefined, {
+  if (num === undefined || num === null) {
+    return;
+  }
+  let obj = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  });
+  };
+  return num.toLocaleString("en-IN", obj);
 };
