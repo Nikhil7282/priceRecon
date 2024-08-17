@@ -40,7 +40,7 @@ export function extractCurrency(element: any) {
 
 export function extractDescription($: any) {
   // const selectors = [".a-unordered-list .a-list-item", ".a-expander-content p"];
-  const selectors = ["#feature-bullets > ul"];
+  const selectors = ["#feature-bullets > ul",".a-unordered-list .a-list-item", ".a-expander-content p"];
 
   for (const selector of selectors) {
     const elements = $(selector);
