@@ -76,9 +76,10 @@ export default async function ProductPage({ params: { id } }: Props) {
                   height={20}
                 />
               </div>
-              <div className="flex">
+              {/* <div className="flex justify-between items-center">
+                <div>{product.stars+" "}</div>
                 <Stars stars={product.ratings || 0} />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="product-info">
@@ -116,14 +117,14 @@ export default async function ProductPage({ params: { id } }: Props) {
                     height={16}
                   />
                   <p className="text-sm text-secondary font-semibold">
-                    {product.reviewsCount}Reviews
+                    {product.reviewsCount+" "}Reviews
                   </p>
                 </div>
               </div>
-              <p className="text-sm text-secondary opacity-50">
+              {/* <p className="text-sm text-secondary opacity-50">
                 <span className="text-primary-green font-semibold">93%</span> of
                 buyers have recommended
-              </p>
+              </p> */}
             </div>
           </div>
           <div className="my-7 flex flex-col gap-5">
@@ -168,6 +169,7 @@ export default async function ProductPage({ params: { id } }: Props) {
           </h3>
           <div className="flex flex-col gap-4">
             {product?.description?.split("\n")}
+            <a href={product.url} target="_blank">Read More</a>
           </div>
         </div>
         <button className="btn 2-fit mx-auto flex item-center justify-center gap-3 min-w-[200px]">
